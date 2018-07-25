@@ -16,10 +16,13 @@ class Liftmode_ReferralCandy_Model_Observer {
         $params = $this->getPurchaseParams($_order);
         $return = $this->notifyReferralCandyAboutNewPurchase($params);
 
+        $referralcorner_url = 'none';
         if ($return['response']['status'] === true) {
-            $_order->setReferralcornerUrl($return['response']['referralcorner_url']);
-            $_order->save();
+            $referralcorner_url = $return['response']['referralcorner_url'];
         }
+            
+        $_order->setReferralcornerUrl($referralcorner_url);
+        $_order->save();
 
         return $this;
     }
@@ -76,7 +79,7 @@ class Liftmode_ReferralCandy_Model_Observer {
 
         $_ordersCollection = Mage::getResourceModel('sales/order_collection')
                     ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE)
-                    ->addAttributeToFilter('referralcorner_url', array('null' => true))
+                    ->addAttributeToFilter('referralcorner_url', array('eq' => 'none'))
                     ->setPage(0, $itemsCount)
                     ->load();
 
@@ -86,10 +89,17 @@ class Liftmode_ReferralCandy_Model_Observer {
             $params = $this->getPurchaseParams($_order);
             $return = $this->notifyReferralCandyAboutNewPurchase($params);
 
+            $referralcorner_url = 'none';
             if ($return['response']['status'] === true) {
-                $_order->setReferralcornerUrl($return['response']['referralcorner_url']);
+                $referralcorner_url = $return['response']['referralcorner_url'];
+            }
+            
+            if ($referralcorner_url !== 'none') {
+                $_order->setReferralcornerUrl($referralcorner_url);
                 $_order->getResource()->saveAttribute($_order, 'referralcorner_url');
             }
+            
+            sleep(2);
         }
 
         $_ordersCollection->clear();
