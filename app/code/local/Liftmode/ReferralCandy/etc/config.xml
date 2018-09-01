@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Liftmode_ReferralCandy>
-            <version>1.5</version>
+            <version>1.6</version>
         </Liftmode_ReferralCandy>
     </modules>
     <global>
@@ -38,6 +38,8 @@
         </resources>
 
         <events>
+<!--
+We check all completed orders later by using cron
             <sales_order_place_after>
                 <observers>
                     <notify_referral_candy_about_new_order>
@@ -46,7 +48,7 @@
                     </notify_referral_candy_about_new_order>
                 </observers>
             </sales_order_place_after>
-
+-->
             <sales_order_payment_cancel>
                 <observers>
                     <notify_referral_candy_about_canceled_order>

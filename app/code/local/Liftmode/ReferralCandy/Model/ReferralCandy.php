@@ -138,6 +138,9 @@ class Liftmode_ReferralCandy_Model_ReferralCandy {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20); // timeout in seconds
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120); //timeout in seconds 2 min
+
         $result = curl_exec($ch);
 
         if ($result === false) {

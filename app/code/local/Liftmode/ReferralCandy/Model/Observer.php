@@ -16,13 +16,11 @@ class Liftmode_ReferralCandy_Model_Observer {
         $params = $this->getPurchaseParams($_order);
         $return = $this->notifyReferralCandyAboutNewPurchase($params);
 
-        $referralcorner_url = 'none';
         if ($return['response']['status'] === true) {
             $referralcorner_url = $return['response']['referralcorner_url'];
+            $_order->setReferralcornerUrl($referralcorner_url);
+            $_order->save();
         }
-            
-        $_order->setReferralcornerUrl($referralcorner_url);
-        $_order->save();
 
         return $this;
     }
@@ -89,16 +87,12 @@ class Liftmode_ReferralCandy_Model_Observer {
             $params = $this->getPurchaseParams($_order);
             $return = $this->notifyReferralCandyAboutNewPurchase($params);
 
-            $referralcorner_url = 'none';
             if ($return['response']['status'] === true) {
                 $referralcorner_url = $return['response']['referralcorner_url'];
-            }
-            
-            if ($referralcorner_url !== 'none') {
                 $_order->setReferralcornerUrl($referralcorner_url);
                 $_order->getResource()->saveAttribute($_order, 'referralcorner_url');
             }
-            
+
             sleep(2);
         }
 
